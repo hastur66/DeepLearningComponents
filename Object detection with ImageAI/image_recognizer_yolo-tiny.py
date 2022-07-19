@@ -4,7 +4,7 @@ recognizer = ObjectDetection()
 
 path_model = 'models/yolo-tiny.h5'
 path_input = 'inputs/sample.jpg'
-path_output = 'outputs/detected_image.jpg'
+path_output = 'outputs/detected_image_yolo.jpg'
 
 recognizer.setModelTypeAsTinyYOLOv3()
 
