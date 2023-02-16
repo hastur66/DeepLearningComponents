@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow import math, matmul, reshape, shape, transpose, cast, float32
+from tensorflow import matmul, reshape, shape, transpose, cast, float32
 from tensorflow.keras.layers import Dense, Layer
 from keras.backend import softmax
 
@@ -8,7 +8,7 @@ class DotProductAttention(Layer):
         super(DotProductAttention, self).__init__(**kwargs)
 
     def call(self, queries, keys, values, d_k, mask=None):
-        scores = matmul(queries, keys, transpose_b=True) / math.sqrt(cast(d_k, float32))
+        scores = matmul(queries, keys, transpose_b=True) / tf.math.sqrt(cast(d_k, float32))
         
         if mask is not None:
             score += -1e9 * mask
@@ -30,9 +30,9 @@ class MultiHeadAttention(Layer):
         self.W_v = Dense(d_v)
         self.W_o = Dense(d_model)
 
-    def reshape_tensor(self, x, heads, flag):
+    def reshape_tensor(self, x, head, flag):
         if flag:
-            x = reshape(x, shape=(shape(x)[0], shape(x)[1], heads, -1))
+            x = reshape(x, shape=(shape(x)[0], shape(x)[1], head, -1))
             x = transpose(x, perm=(0, 2, 1, 3))
         else:
             x = transpose(x, perm=(0, 2, 1, 3))
@@ -41,13 +41,11 @@ class MultiHeadAttention(Layer):
 
     def call(self, queries, keys, values, mask=None):
         q_reshaped = self.reshape_tensor(self.W_q(queries), self.head, True)
-        k_reshaped = self.reshape_tensor(self.W_k(keys), self.heads, True)
+        k_reshaped = self.reshape_tensor(self.W_k(keys), self.head, True)
         v_reshaped = self.reshape_tensor(self.W_v(values), self.head, True)
 
         o_reshaped = self.attention(q_reshaped, k_reshaped, v_reshaped, self.d_k, mask)
         
-        output = self.reshape_tensor(o_reshaped, self.heads, False)
+        output = self.reshape_tensor(o_reshaped, self.head, False)
 
         return self.W_o(output)
-
-    # https://machinelearningmastery.com/how-to-implement-multi-head-attention-from-scratch-in-tensorflow-and-keras/
