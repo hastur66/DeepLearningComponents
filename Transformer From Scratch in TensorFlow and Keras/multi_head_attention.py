@@ -1,6 +1,5 @@
 import tensorflow as tf
-import math
-from tensorflow import matmul, reshape, shape, transpose, cast, float32
+from tensorflow import math, matmul, reshape, shape, transpose, cast, float32
 from tensorflow.keras.layers import Dense, Layer
 from keras.backend import softmax
 
