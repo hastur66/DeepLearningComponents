@@ -11,7 +11,7 @@ class DotProductAttention(Layer):
         scores = matmul(queries, keys, transpose_b=True) / tf.math.sqrt(cast(d_k, float32))
         
         if mask is not None:
-            score += -1e9 * mask
+            scores += -1e9 * mask
 
         weight = softmax(scores)
 
