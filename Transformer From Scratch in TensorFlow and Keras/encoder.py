@@ -1,5 +1,5 @@
 from tensorflow.keras.layers import LayerNormalization, Layer, Dense, ReLU, Dropout
-from multi_head_attention import MultiHeadAttention
+from multihead_attention import MultiHeadAttention
 from positional_encoding import PositionEmbeddingFixedWeights
 
 class AddNormalization(Layer):
