@@ -1,12 +1,16 @@
-from tensorflow.keras.layers import Layer, Dropout
+from tensorflow.keras.layers import Layer, Dropout, Input
+from tensorflow.keras.models import Model
 from multihead_attention import MultiHeadAttention
 from positional_encoding import PositionEmbeddingFixedWeights
 from encoder import AddNormalization, FeedForward
  
 
 class DecoderLayer(Layer):
-    def __init__(self, h, d_k, d_v, d_model, d_ff, rate, **kwargs):
+    def __init__(self, sequence_length, h, d_k, d_v, d_model, d_ff, rate, **kwargs):
         super(DecoderLayer, self).__init__(**kwargs)
+        self.build(input_shape=[None, sequence_length, d_model])
+        self.d_model = d_model
+        self.sequence_length = sequence_length
         self.multihead_attention1 = MultiHeadAttention(h, d_k, d_v, d_model)
         self.dropout1 = Dropout(rate)
         self.add_norm1 = AddNormalization()
@@ -17,6 +21,10 @@ class DecoderLayer(Layer):
         self.dropout3 = Dropout(rate)
         self.add_norm3 = AddNormalization()
  
+    def build_graph(self):
+        input_layer = Input(shape=(self.sequence_length, self.d_model))
+        return Model(inputs=[input_layer], outputs=self.call(input_layer, None, True))
+    
     def call(self, x, encoder_output, lookahead_mask, padding_mask, training):
         multihead_output1 = self.multihead_attention1(x, x, x, lookahead_mask)
         multihead_output1 = self.dropout1(multihead_output1, training=training)
@@ -37,7 +45,7 @@ class Decoder(Layer):
         super(Decoder, self).__init__(**kwargs)
         self.pos_encoding = PositionEmbeddingFixedWeights(sequence_length, vocab_size, d_model)
         self.dropout = Dropout(rate)
-        self.decoder_layer = [DecoderLayer(h, d_k, d_v, d_model, d_ff, rate) for _ in range(n)]
+        self.decoder_layer = [DecoderLayer(sequence_length,h, d_k, d_v, d_model, d_ff, rate) for _ in range(n)]
  
     def call(self, output_target, encoder_output, lookahead_mask, padding_mask, training):
         pos_encoding_output = self.pos_encoding(output_target)
