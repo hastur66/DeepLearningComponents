@@ -1,4 +1,5 @@
-from tensorflow.keras.layers import LayerNormalization, Layer, Dense, ReLU, Dropout
+from tensorflow.keras.layers import LayerNormalization, Layer, Dense, ReLU, Dropout, Input
+from tensorflow.keras.models import Model
 from multihead_attention import MultiHeadAttention
 from positional_encoding import PositionEmbeddingFixedWeights
 
@@ -26,14 +27,21 @@ class FeedForward(Layer):
 
 
 class EncoderLayer(Layer):
-    def __init__(self, h, d_k, d_v, d_model, d_ff, rate, **kwargs):
+    def __init__(self, sequence_length, h, d_k, d_v, d_model, d_ff, rate, **kwargs):
         super(EncoderLayer, self).__init__(**kwargs)
+        self.build(input_shape=[None, sequence_length, d_model])
+        self.d_model = d_model
+        self.sequence_length = sequence_length
         self.multihead_attention = MultiHeadAttention(h, d_k, d_v, d_model)
         self.dropout1 = Dropout(rate)
         self.add_norm1 = AddNormalization()
         self.feed_forward = FeedForward(d_ff, d_model)
         self.dropout2 = Dropout(rate)
         self.add_norm2 = AddNormalization()
+
+    def build_graph(self):
+        input_layer = Input(shape=(self.sequence_length, self.d_model))
+        return Model(inputs=[input_layer], outputs=self.call(input_layer, None, True))
 
     def call(self, x, padding_mask, training):
         multihead_output = self.multihead_attention(x, x, x, padding_mask)
@@ -53,7 +61,7 @@ class Encoder(Layer):
         super(Encoder, self).__init__(**kwargs)
         self.pos_encoding = PositionEmbeddingFixedWeights(sequence_length, vocab_size, d_model)
         self.dropout = Dropout(rate)
-        self.encoder_layer = [EncoderLayer(h, d_k, d_v, d_model, d_ff, rate) for _ in range(n)]
+        self.encoder_layer = [EncoderLayer(sequence_length,h, d_k, d_v, d_model, d_ff, rate) for _ in range(n)]
 
     def call(self, input_sentence, padding_mask, training):
         pos_encoding_output = self.pos_encoding(input_sentence)
