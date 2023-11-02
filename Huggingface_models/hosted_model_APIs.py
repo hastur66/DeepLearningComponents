@@ -118,5 +118,151 @@ def text_classification_task(payload):
     print(response)
     return response
 
+
 # Task 7 - Text Generation task
-#https://huggingface.co/docs/api-inference/detailed_parameters#text-generation-task
+payload = {"inputs": "The answer to universe is "}
+
+def text_generation_task(payload):
+    """ Generates a text.
+      """
+    API_URL = "https://api-inference.huggingface.co/models/gpt2"
+    response = query(payload, API_URL)
+    print(response)
+    return response
+
+
+# Task 8 - Text2Text generation card
+payload = {"inputs": "The answer to universe is "}
+
+def text2text_generation_task(payload):
+    """ Generates a text.
+      """
+    API_URL = "https://api-inference.huggingface.co/models/t5-small"
+    response = query(payload, API_URL)
+    print(response)
+    return response
+
+
+# Task 9 - Token Classification task/Named Entity Recognition task
+payload = {"inputs": "My name is Sarah Jessica Parker but you can call me Jessica"}
+
+def token_classification_task(payload):
+    """ Classifies tokens into one of the categories.
+      """
+    API_URL = "https://api-inference.huggingface.co/models/dbmdz/bert-large-cased-finetuned-conll03-english"
+    response = query(payload, API_URL)
+    print(response)
+    return response
+
+
+# Task 10 - Translation task
+payload = {"inputs": "Меня зовут Вольфганг и я живу в Берлине"}
+
+def translation_task(payload):
+    """ Translates a text.
+      """
+    API_URL = "https://api-inference.huggingface.co/models/Helsinki-NLP/opus-mt-ru-en"
+    response = query(payload, API_URL)
+    print(response)
+    return response
+
+
+# Task 11 - Zero shot classification task
+payload = {"inputs": "Hi, I recently bought a device from your company but it is not working as advertised and I would like to get reimbursed!",
+        "parameters": {"candidate_labels": ["refund", "legal", "faq"]},
+        }
+
+def zero_shot_classification_task(payload):
+    """ Classifies a text into one of the categories.
+      """
+    API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-mnli"
+    response = query(payload, API_URL)
+    print(response)
+    return response 
+
+
+# Task 12 - Conversational task
+payload = {"inputs": {
+            "past_user_inputs": ["Which movie is the best ?"],
+            "generated_responses": ["It's Die Hard for sure."],
+            "text": "Can you explain why ?",
+            }
+          }
+
+def conversational_task(payload):
+    """ Generates conversation.
+      """
+    API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-small" #"https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill"
+    response = query(payload, API_URL)
+    print(response)
+    return response
+
+
+# Task 13 - Automatic Speech Recognition task
+payload = "audio.flac"
+
+def automatic_speech_recognition_task(payload):
+    """ Generates text from audio.
+      """
+    with open(payload, "rb") as f:
+        data = f.read()
+    API_URL = "https://api-inference.huggingface.co/models/facebook/wav2vec2-large-lv60"
+    response = query(data, API_URL)
+    print(response)
+    return response
+
+
+# Task 14 - Audio Classification task
+payload = "audio.flac"
+
+def audio_classification_task(payload):
+    """ Classifies audio into one of the categories.
+      """
+    with open(payload, "rb") as f:
+        data = f.read()
+    API_URL = "https://api-inference.huggingface.co/models/facebook/hubert-large-superb-er"
+    response = query(data, API_URL)
+    print(response)
+    return response
+
+
+# Task 15 - Image Classification task
+payload = "image.jpg"
+
+def image_classification_task(payload):
+    """ Classifies image into one of the categories.
+      """
+    with open(payload, "rb") as f:
+        data = f.read()
+    API_URL = "https://api-inference.huggingface.co/models/google/vit-base-patch16-224"
+    response = query(data, API_URL)
+    print(response)
+    return response
+
+
+# Task 16 - Object Detection task
+payload = "image.jpg"
+
+def object_detection_task(payload):
+    """ Detects objects in an image.
+      """
+    with open(payload, "rb") as f:
+        data = f.read()
+    API_URL = "https://api-inference.huggingface.co/models/facebook/detr-resnet-50"
+    response = query(data, API_URL)
+    print(response)
+    return response
+
+
+# Task 17 - Image segmentation task
+payload = "image.jpg"
+
+def image_segmentation_task(payload):
+    """ Detects objects in an image.
+      """
+    with open(payload, "rb") as f:
+        data = f.read()
+    API_URL = "https://api-inference.huggingface.co/models/facebook/detr-resnet-50-panoptic"
+    response = query(data, API_URL)
+    print(response)
+    return response
