@@ -1,10 +1,10 @@
 import keras_nlp
 import tensorflow as tf
 import tensorflow_datasets as tfds
-import tensorflow_text as text
+import tensorflow_text as tf_text
 from tensorflow import keras
 from tensorflow.lite.python import interpreter
-import time
+import numpy as np
 
 gpt2_lm = keras_nlp.models.GPT2CausalLM.from_preset("gpt2_base_en_cnn_dailymail")
 
@@ -39,5 +39,7 @@ converter.target_spec.experimental_select_user_tf_ops = ["UnsortedSegmentJoin", 
 converter._experimental_guarantee_all_funcs_one_use = True
 quant_generate_tflite = converter.convert()
 
-with open('unquantized_gpt2.tflite', 'wb') as f:
+with open('quantized_gpt2.tflite', 'wb') as f:
   f.write(quant_generate_tflite)
+
+run_inference("I'm enjoying a", quant_generate_tflite)
