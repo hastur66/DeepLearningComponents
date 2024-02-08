@@ -17,9 +17,9 @@ response = model.generate_content(img)
 
 print(response.text)
 
-response_descriptive = model.generate_content(["Write a short, engaging blog post based on this picture." 
-                                               "It should include a description of the meal in the photo and talk about "
-                                               "my journey meal prepping.", 
+response_descriptive = model.generate_content(["""Write a short, engaging blog post based on this picture.
+                                               It should include a description of the meal in the photo and talk about
+                                               my journey meal prepping.""", 
                                                img],
                                                stream=True)
 
