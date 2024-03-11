@@ -10,11 +10,11 @@ anthropic = Anthropic(
 	api_key=API_KEY,
 	)
 
-completion = anthropic.completions.create(
+response = anthropic.completions.create(
 	model="claude-2.1",
 	max_tokens_to_sample=350,
 	prompt=f"{HUMAN_PROMPT} How do I learn Python in a week?{AI_PROMPT}",
 	)
 	
-print(f"Response: {completion}")
-print(f"Completion: {completion.completion}")
+print(f"Response: {response}")
+print(f"Completion: {response.completion}")
