@@ -14,7 +14,11 @@ response = anthropic.messages.create(
 	model="claude-3-opus-20240229", # claude-3-sonnet-20240229
 	max_tokens=350,
 	messages=[
-        {"role": "user", "content": "Hello, there"}],
+        {
+            "role": "user", 
+         	"content": "Hello, there"
+            }
+        ],
 	)
 	
 print(f"Response: {response}")
