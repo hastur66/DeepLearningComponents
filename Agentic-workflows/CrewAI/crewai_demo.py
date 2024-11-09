@@ -5,8 +5,8 @@ import os
 
 load_dotenv()
 
-# os.environ["SERPER_API_KEY"] = "Your SerperDev API Key"
-# os.environ["OPENAI_API_KEY"] = "Your OpenAI API Key
+# os.environ["SERPER_API_KEY"] = "SerperDev_API_Key"
+# os.environ["OPENAI_API_KEY"] = "OpenAI_API_Key"
 
 # Initialize a tool that the agents will use for research
 search_tool = SerperDevTool()
