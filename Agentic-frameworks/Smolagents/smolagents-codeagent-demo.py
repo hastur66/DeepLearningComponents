@@ -1,4 +1,4 @@
-from smolagents import CodeAgent, HfApiModel
+from smolagents import CodeAgent, InferenceClientModel
 from dotenv import load_dotenv
 import os
 
@@ -8,7 +8,7 @@ HUGGINGFACE_TOKEN = os.getenv("HUGGINGFACE_TOKEN")
 
 model_id = "Qwen/Qwen2.5-Coder-32B-Instruct"
 
-model = HfApiModel(
+model = InferenceClientModel(
     model_id=model_id,
     token=HUGGINGFACE_TOKEN,
 )
