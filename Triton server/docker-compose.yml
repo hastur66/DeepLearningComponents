@@ -1,0 +1,21 @@
+
+services:
+  triton:
+    image: nvcr.io/nvidia/tritonserver:22.12-py3
+    command: tritonserver --model-repository=/models --allow-gpu-metrics=false
+    ports:
+      - "8000:8000"   # HTTP endpoint
+      - "8001:8001"   # gRPC endpoint
+      - "8002:8002"   # Metrics endpoint
+    volumes:
+      - ./models:/models
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
