@@ -1,14 +1,3 @@
-.ipynb_checkpoints
-*.pyc
-*.env
-*.db
-
-*.wav
-*.jpg
-*.jpeg
-
-*.onnx
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
