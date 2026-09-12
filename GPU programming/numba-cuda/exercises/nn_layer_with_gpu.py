@@ -46,3 +46,4 @@ arguments = {"n":n,
 
 a = create_hidden_layer(**arguments)
 print(a)
+print(a.copy_to_host())
